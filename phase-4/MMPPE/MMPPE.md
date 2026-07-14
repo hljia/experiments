@@ -50,7 +50,9 @@ To understand and constrain the uncertainty in aerosol radiative forcing (ACI+AR
 
 ### One-At-a-Time Test
 
-To ensure that all parameters are wired properly, **a five-day One-At-a-Time (OAT) test (1–5 Aug 2026) is strongly recommended before the PPE runs.** In each simulation, one parameter is set to its lower or upper bound while all others remain at their default values.
+To ensure that all parameters are wired properly, **a five-day One-At-a-Time (OAT) test (1–5 Aug 2025) is strongly recommended before the PPE runs.** In each OAT simulation, one parameter is set to its lower or upper bound while all others remain at their default values.
+
+**Spin-up**: first perform a 3-month spin-up of the default CTL run, then initialize all OAT runs from this same CTL state.
 
 **Variables to test:**
 - AOD, AE, SSA, AAOD
@@ -67,7 +69,7 @@ An example of relative change in AOD from ICON-HAM:
 
 
 ### Perturbed Parameters
-We focus on multiple aerosol- and cloud-related processes. For aerosols, they are aerosol emissions, optical and hygroscopic properties, wet and dry depositions, nucleation,  aging and chemistry, with a special focus on emissions from biomass burning and natural sources. For clouds, the targeted processes/schemes include activation, cloud microphysics, cloud cover, convection, optical processes, and turbulence. See [Jia et al. (2026)](acp_link) for more detials.
+We focus on multiple aerosol- and cloud-related processes. For aerosols, they are aerosol emissions, optical and hygroscopic properties, wet and dry depositions, nucleation,  aging and chemistry, with a special focus on emissions from biomass burning and natural sources. For clouds, the targeted processes/schemes include activation, cloud microphysics, cloud cover, convection, optical processes, and turbulence. See [Jia et al. (2026)](https://doi.org/10.5194/egusphere-2026-3275) for more detials.
 
 **Latin hypercube sampling** strategy is used to generate parameter values for each ensemble member. An example Python script can be found at: https://github.com/hljia/LHS_example
 
@@ -111,7 +113,7 @@ These parameters are either less critical than mandatory parameters or important
 | micro_ccraut_cdnc_expo<br>(Abs) | -1.79 | [-0.8,-2] | CDNC exponent in autoconversion scheme | Microphysics | **Highly recommanded** if Khairoutdinov and Kogan (2010) scheme is used| 
 | micro_ccraut_lwp_expo<br>(Abs) | 2.47 | [2.1,3.3] | LWP exponent in autoconversion scheme| Microphysics | **Highly recommanded** if Khairoutdinov and Kogan (2010) scheme is used| 
 | drydep_acc<br>(Rel)| 1 | [0.1,10] | Scale factor for dry deposition rate of accumulation-mode aerosols | Deposition | | 
-| chem_so2<br>(Rel) | 1 | [0.5, 2] | Scale factor for so2 chemistry reaction rates | Chemistry | |
+| chem_so2<br>(Rel) | 1 | [0.5, 2] | Scale factor for so2 chemistry reaction rates | Chemistry | so2-->so4 |
 | kappa_so4 <br>(Abs)| 0.6 | [0.3,0.8] | Hygroscopic parameter for sulfate aerosols | Hygroscopicity | |
 | coating_so4<br>(Abs)| 1 | [0.3,5] | Layer thickness of sulfate to transfer an insoluble particle to a soluble mode | Aging | It is  given in units of layers of monomolecular sulfate, NOT ‘nm’ |
 | emi_ss_expo<br>(Rel)| 1 | [0.9,1.1] | Scale factor for wind exponent in the parameterization  of sea salt emission | Emission | |
@@ -148,6 +150,7 @@ These parameters are either less critical than mandatory parameters or important
 | **2D (lat, lon)**         |                                       |          |                        |
 | TAU_2D_550nm              | Aerosol Optical thickness @550nm      | 1 |                        |
 | ABS_2D_550nm              | Absorption optical thickness @550nm   | 1 |                        |
+| SSA_2D_440nm              | Single scattering albedo @440nm       | 1 |                        |
 | ANG_440nm_670nm           | Angstroem parameter 440nm-670nm       | 1 |                        |
 | TAU_2D_MODE_KS_550nm      | Optical thickness by mode KS 550nm    | 1 |   reduce to 3 variables: Fine, Coarse_soluble and Coarse_insoluble                     |
 | TAU_2D_MODE_AS_550nm      | Optical thickness by mode AS 550nm    | 1 |                        |
@@ -355,7 +358,7 @@ The format for the AeroCom file name (one variable per file) should be:
 ## References
 Ghosh, P., Evans, K. J., Grosvenor, D. P. et al. Assessing modifications to the Abdul-Razzak and Ghan aerosol activation parameterization (version ARG2000) to improve simulated aerosol–cloud radiative effects in the UK Met Office Unified Model (UM version 13.0). Geosci. Model Dev. 18, 4899–4913 (2025). https://doi.org/10.5194/gmd-18-4899-2025
 
-Jia, H., Neubauer, D., Bhatti, Y. et al. Parametric uncertainty in aerosol effective radiative forcing in the global aerosol–climate model ICON2.6.4–A–HAM2.3. EGUsphere [preprint] (2026). 
+Jia, H., Neubauer, D., Bhatti, Y. et al. Process-level contributions to uncertainty in aerosol effective radiative forcing: a perturbed parameter ensemble with the aerosol–climate model ICON–HAM. EGUsphere [preprint] (2026). https://doi.org/10.5194/egusphere-2026-3275 
 
 Virtanen, A., Joutsensaari, J., Kokkola, H. et al. High sensitivity of cloud formation to aerosol changes. Nat. Geosci. 18, 289–295 (2025). https://doi.org/10.1038/s41561-025-01662-y
 
