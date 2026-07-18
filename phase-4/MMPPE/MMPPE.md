@@ -55,17 +55,31 @@ To ensure that all parameters are wired properly, **a five-day One-At-a-Time (OA
 **Spin-up**: first perform a 3-month spin-up of the default CTL run, then initialize all OAT runs from this same CTL state.
 
 **Variables to test:**
-- AOD, AE, SSA, AAOD
-- CCN at 0.3% SS (column and surface)
-- In-cloud CDNC at cloud top, cloud cover, LWP, IWP
-- Surface precipitation flux
-- Shortwave and longwave cloud forcing
-- Net radiation flux at TOA
+| Variable               | Dedcription                                      |
+|------------------------|--------------------------------------------------|
+| od550aer               | Aerosol Optical thickness @550nm                 |  
+| abs550aer              | Absorption optical thickness @550nm              |  
+| angstrm550_865         | Angstroem parameter 550nm-865nm                  | 
+| ssa550                 | Single scattering albedo @550nm                  |
+| ccns.3                 | Surface CCN number concentration at S=0.3%       |
+| ccncol.3               | Column-integrated number concentration at S=0.3% |  
+| cdnc_incl_ct           | Cloud-top in-cloud cloud droplet number conc.    |
+| clt                    | Total cloud cover                                |
+| cllvi                  | Vertically integrated cloud water                |       
+| clivi                  | Vertically integrated cloud ice                  |   
+| pr                     | Surface recipitation flux                        |
+| scre                   | Shortwave cloud radiative effect at TOA          |
+| lcre                   | Longwave cloud radiative effect at TOA           |
+| fnet                   | Net radiation flux at TOA                        |
 
-For each variable, please report the global-mean absolute and relative changes with respect to the baseline run.
+Submit the following:
 
-An example of relative change in AOD from ICON-HAM:
-![OAT_AOD](./OAT_AOD.png)
+- a CSV file following the format of [ICON-HAM_5d_OAT.csv](ICON-HAM_5d_OAT.csv), containing 5-day global-mean values for the base, `parameter_L`, and `parameter_H` experiments
+- plots of the relative (%) change with respect to the base run (see example for ICON-HAM `od550aer` below). You may use [plot_OAT.py](./plot_OAT.py) to generate plots in the example style.
+
+![OAT_AOD](./ICON-HAM_5d_OAT_od550aer.png)
+
+See **[Model Output submission](#model-output-submission)** for submission instructions.
 
 
 ### Perturbed Parameters
@@ -120,7 +134,7 @@ These parameters are either less critical than mandatory parameters or important
 | conv_cmfctop<br>(Abs)| 0.1 | [0.01,0.35] | fractional convective mass flux across the top of cloud | Convection | |
 
 
-#### Optional
+#### Optional (14)
 
 | Variable   | Default | Range  | Description | Process | Remark | 
 |------------|---------|--------|-------------|---------|--------|
@@ -140,6 +154,7 @@ These parameters are either less critical than mandatory parameters or important
 | turb_prandtl<br>(Abs) | 1 | [0.6,1] | Neutral limit Prandtl number | Turbulence | |
 
 ## Model Output Variables
+> Note: the output list and variable names are still being finalised...
 
 ### 6-hourly Instantaneous
 
@@ -335,7 +350,10 @@ These parameters are either less critical than mandatory parameters or important
 
 ## Model Output Submission
 
-For **One-At-a-Time Test**, upload your OAT plots to the google drive folder  [ACI-PPEMIP_OAT/](https://drive.google.com/drive/folders/1V1c-4pqVWfcsTqqsZ4UamWCuBw-jrNvz?usp=drive_link) (please create a folder for your model), and enter your parameter ranges in the spreadsheet [ACI-PPEMIP parameter ranges](https://docs.google.com/spreadsheets/d/1tHGisfeP_58EO69tO5mt5H-nEfxcTZLcGYEDKeKs-v0/edit?gid=0#gid=0). The ICON-HAM results are provided there as an example.
+For **One-At-a-Time Test**, please
+- Upload your csv file and OAT plots to the google drive folder [ACI-PPEMIP_OAT/](https://drive.google.com/drive/folders/1V1c-4pqVWfcsTqqsZ4UamWCuBw-jrNvz?usp=drive_link) (please create a subfolder for your model)
+-  Enter your parameter ranges in the spreadsheet [ACI-PPEMIP parameter ranges](https://docs.google.com/spreadsheets/d/1tHGisfeP_58EO69tO5mt5H-nEfxcTZLcGYEDKeKs-v0/edit?gid=0#gid=0).
+- You will see examples for ICON-HAM PPE there
 
 For **PPE experiments**, submit the following data via the AeroCom website ([Submit Data](https://aerocom.met.no/FAQ/data_access/submit_data)):
 
