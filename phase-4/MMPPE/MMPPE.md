@@ -2,11 +2,10 @@
 
 ## Organizers
 - Hailing Jia ([h.jia@sron.nl](mailto:h.jia@sron.nl))
-- ...
 
 ## Deadlines for Submission of Model Data
 - **[One-At-a-Time Test](#one-at-a-time-test):** 31 July 2026
-- **[PPE Experiments](#ppe-simulations):** 31 August 2026
+- **[PPE Experiments](#ppe-simulations):** 30 September 2026
 
 
 ## Motivation
@@ -29,7 +28,7 @@ To understand and constrain the uncertainty in aerosol radiative forcing (ACI+AR
 
 - **CFMIP COSP:** Optional, but highly desirable for models with COSP
 
-- **Ensemble size:** The number of simulations should be at least 6 times the number of [perturbed parameters](#perturbed-parameters), with a target ratio of 8 where possible. For example, a PPE with 25 parameters, plus 1 CTL run, requires a minimum of (25 × 6 + 1) × 2 = 302 simulations (PI+PD).
+- **Ensemble size:** The number of simulations should be at least 6 times the number of [perturbed parameters](#perturbed-parameters), with a target ratio of 8 where possible. For example, a PPE with 29 (mandatory + recommended) parameters, plus 1 CTL run, requires a minimum of (29 × 6 + 1) × 2 = 350 simulations (PI+PD).
 
 - **Input/Forcing datasets** (kept as consistent as possible with CMIP7):
 
@@ -108,7 +107,7 @@ These parameters are not model-dependent, so all models should be able to pertur
 | emi_du<br>(Rel)| 1 | [0.5, 2] | Scale factor for dust emission | Emission | |
 | emi_cmr_ff<br>(Abs)| 30nm | [15, 45] | Emitted particle size for fossil fuel emissions (unit: nm) | Emission | not in NorESM |
 | emi_cmr_bb<br>(Abs)| 75nm | [25, 250] | Emitted particle size for biomass burning emissions | Emission | not in NorESM |
-| rad_bc_ni<br>(Abs)| 0.71 | [0.2, 0.9] | BC imaginary refractive index at 550nm|Aerosol Optics | if BC imaginary refractive index is wavelength-dependent in your model, scale all SW wavelengths by the same factor (`scale_bc_rad_ni`) derived from 550nm, to preserve the original spectral dependence (see [wavelength-dependent perturbation](#example-for-wavelength-dependent-perturbation)) for example code|
+| rad_bc_ni<br>(Abs)| 0.71 | [0.2, 0.9] | BC imaginary refractive index at 550nm|Aerosol Optics | if BC imaginary refractive index is wavelength-dependent in your model, scale all SW wavelengths by the same factor (`scale_bc_rad_ni`) derived from 550nm, to preserve the original spectral dependence (see [wavelength-dependent perturbation](#example-for-wavelength-dependent-perturbation) for example code)|
 | rad_oc_ni<br>(Abs)|0.0055 | [0.0001,0.05] | OC imaginary refractive index at 550nm| Aerosol Optics | same as `rad_bc_ni`|
 | wetdep_ic<br>(Rel)| 1 | [0.75, 1.25] | Scale factor for in-cloud wet deposition rate | Deposition | |
 | activ_aero<br>(Rel)| 1 | [0.75, 1.25] | Scale factor for activated aerosols | Activation | reflects the uncertainty of activation scheme; [0.75, 1.25] from [Ghosh et al. (2025)](https://doi.org/10.5194/gmd-18-4899-2025) |
@@ -159,30 +158,25 @@ These parameters are either less critical than mandatory parameters or important
 | cld_opt_cinhoml3<br>(Abs) | 0.8 | [0.6,1] | Inhomogeneity factor for deep/mid-level convection | Cloud Optics | |
 | turb_prandtl<br>(Abs) | 1 | [0.6,1] | Neutral limit Prandtl number | Turbulence | |
 
-## Model Output Variables (still being finalised..)
-> Note: "+" denotes variables not yet in the AeroCom CTRL variable spreadsheet.
+## Model Output Variables
+> Note: "+" denotes variables to be added to the AeroCom AP4 CTRL variable spreadsheet..
  
-**6H**: 6-hourly instantaneous output
-**M**: monthly mean output
+**6H**: 6-hourly **instantaneous** output
+**M**: monthly **mean** output
 
 ### 3D outputs (lev, lat, lon)
-- **output levels**: output all model levels unless otherwise specified in the *Remarks* column.
-- **height fields (`zfull` & `zhalf`)**: output once if time-independent; otherwise output at the requested frequency
+- **output levels**: all model levels for monthly outputs; 8 height levels for 6-hourly `ec355aer` (see *Remarks*).
 
 
 | **AeroCom name**         | **Description**                     | **Units** | **Freq**             |**Remark**             |
 |---------------------------|---------------------------------------|----------|------------------------|------------------------|
-| zfull  +       | geometric height at model full levels a.s.l. | m | 6H,M | 6H: lowest 3 model levels<br>M: all model levels|
+| ec355aer +     | aerosol extinction coefficient @355nm     | m-1 | 6H,M |6H: 8 height levels [20, 200, 500, 1000, 2000, 3500, 6000, 10000] m above ground level (a.g.l.)| 
+| zfull  +       | geometric height at model full levels above sea level (a.s.l.) | m | M | |
 | zhalf  +       | geometric height at model interfaces (half levels) a.s.l.  | m | M |  |
-| ec355aer +     | aerosol extinction coefficient @355nm     | m-1 | 6H,M |6H: 8 height levels [0, 200, 500, 1000, 2000, 3500, 6000, 10000] m above ground level (a.g.l.)<br>M: all model levels| 
-| conccn30_50 +  | number concentration of aerosols (30<D<50nm)    | m-2 | 6H |lowest 3 model levels<br>Aitken mode (aerosol growth / NPF) |  
-| conccn50_100 + | number concentration of aerosols  (50<D<100nm)   | m-2 | 6H |lowest 3 model levels<br>Aitken mode (CCN in pristine environments) |  
-| conccn100_500 +| number concentration of aerosols  (100<D<500nm)  | m-2 | 6H |lowest 3 model levels<br>Accumulation mode (dominant CCN size range) |  
-| conccn250_500 +| number concentration of aerosols  (250<D<500nm)  | m-2 | 6H |lowest 3 model levels<br>Upper accumulation range (CCN in polluted environments) |  
-| ccn01 +        | ccn number concentration at SS=0.1% | m-3 | 6H,M|6H: lowest 3 model levels<br>M: all model levels |
-| ccn03          | ccn number concentration at SS=0.3%  | m-3 | 6H,M|6H: lowest 3 model levels<br>M: all model levels |
-| ccn05 +        | ccn number concentration at SS=0.5%  | m-3 | 6H,M|6H: lowest 3 model levels<br>M: all model levels |
-| mmrdms +       | mass mixing ratio od dms | kg kg-1 | M | |
+| ccn01 +        | ccn number concentration at SS=0.1% | m-3 | M| |
+| ccn03          | ccn number concentration at SS=0.3%  | m-3 | M| |
+| ccn05 +        | ccn number concentration at SS=0.5%  | m-3 | M| |
+| mmrdms +       | mass mixing ratio of dms | kg kg-1 | M | |
 | mmrso2 +       | mass mixing ratio of so2| kg kg-1 | M | |
 | mmrso4         | mass mixing ratio of sulfate| kg kg-1 | M | |
 | mmrbc          | mass mixing ratio black carbon | kg kg-1 | M | |
@@ -197,7 +191,7 @@ These parameters are either less critical than mandatory parameters or important
 | cl             | cloud area fraction | 1 | M | |
 | cli            | specific cloud ice content | kg kg-1 | M | |
 | clw            | specific cloud water content | kg kg-1 | M | |
-| wa             | vertical velocity | Pa s-1 | M | #TBD ->m s-1|
+| wa             | upward air velocity | m s-1 | M |   |
 | ta             | air temperature | K | M | |
 | rho            | atmospheric air density | kg m-3 | M | |
 | pfull          | air pressure | Pa | M | |
@@ -213,17 +207,23 @@ These parameters are either less critical than mandatory parameters or important
 | od550aer_fine +   | fine-mode aerosol optical thickness @550nm    | 1 | 6H,M | nucleation + Aitken + accumulation modes         |
 | od550aer_cs +     | coarse soluble aerosol optical thickness @550nm    | 1 | 6H,M |                  |
 | od550aer_ci +     | coarse insoluble aerosol optical thickness @550nm    | 1 | 6H,M |                  |
+| conccn30_50sf +     | aerosol number concentration (30<D<50nm) at the lowest model level    | m-2 | 6H,M |Aitken mode (aerosol growth / NPF) |  
+| conccn50_100sf +    | aerosol number concentration (50<D<100nm) at the lowest model level   | m-2 | 6H,M |Aitken mode (CCN in pristine environments) |  
+| conccn100_500sf +   | aerosol number concentration (100<D<500nm) at the lowest model level  | m-2 | 6H,M |Accumulation mode (dominant CCN size range) |  
+| conccn250_500sf +   | aerosol number concentration (250<D<500nm) at the lowest model level  | m-2 | 6H,M |Upper accumulation range (CCN in polluted environments) | 
+| conccn500_800sf +   | aerosol number concentration (500<D<800nm) at the lowest model level  | m-2 | 6H,M | | 
+| conccn150vi +     | vertically integrated aerosol number concentration (D>150nm)     | m-2      | 6H,M |  | 
 | loadbc            | atmospheric burden of black carbon | kg m-2   | 6H,M |                        |
 | loaddu            | atmospheric burden of dust | kg m-2   | 6H,M |                        |
 | loadoa +          | atmospheric burden of organic matter | kg m-2   | 6H,M |                        |
 | loadso4           | atmospheric burden of sulfate | kg m-2   | 6H,M |                        |
 | loadss            | atmospheric burden of seasalt | kg m-2   | 6H,M |                        |
 | loadaerh2o +      | atmospheric burden of aerosol water| kg m-2   | 6H,M |                        |
-| icncvi +?         | vertically integrated ice crystal number concentration | m-2   | 6H,M |                        |
-| cdncvi +?         | vertically integrated cloud droplet number concentration | m-2   | 6H,M |                        |
-| conccn200vi +     | vertically integrated aerosol number concentration (D>200nm)     | m-2      | 6H,M | #TBD or>150nm?    | 
 | ccn01vi +         | vertically integrated CCN number concentration at S=0.1% | m-2   | 6H,M |                        |
 | ccn03vi +         | vertically integrated CCN number concentration at S=0.3% | m-2   | 6H,M |                        |
+| ccn01sf +         | CCN number concentration at SS=0.1% st the lowerst model level| m-3 | 6H,M| |
+| ccn03sf +         | CCN number concentration at SS=0.3% st the lowerst model level| m-3 | 6H,M| |
+| ccn05sf +         | CCN number concentration at SS=0.5% st the lowerst model level| m-3 | 6H,M| |
 | ccn01bl +         | CCN number concentration at S=0.1% at 1 km above the surface | m-3 | 6H,M |                        |
 | ccn03bl +         | CCN number concentration at S=0.3% at 1 km above the surface | m-3 | 6H,M |                        |
 | so4sf   +         | mass concentration of sulfate at surface | kg m-3  | 6H,M |                        |
@@ -232,19 +232,28 @@ These parameters are either less critical than mandatory parameters or important
 | pm1sf   +         | mass concentration of pm1 at surface | kg m-3  | 6H,M |                        |
 | pm2p5sf +         | mass concentration of pm2.5 at surface | kg m-3  | 6H,M |                        |
 | pm10sf  +         | mass concentration of pm10 at surface | kg m-3  | 6H,M |                        |
-| cdnc_incl_ct +    | in-cloud cloud top droplet number concentration | m-3 | 6H,M |                        |
-| liq_ct_occ +      | liquid cloud-top occurrence frequency | 1 | M | for weighting monthly mean cdnc_incl_ct (if cdnc_incl_ct is set to zero in the absence of liquid-topped clouds)| 
-| reffclwtop        | effective radius of cloud droplet at cloud_top  | m       | 6H,M |                   |
-| reffclitop        | effective radius of ice crystal at cloud top    | m       | 6H,M |                   |
+| **< cloud-top diag seen from TOA** |||| for the Fortran code for the seven cloud-top diagnostics below, see the *"Cloud-top calculation"* in the [aci-baseline](../aci-baseline/aci-baseline.md) experiment |
 | clt               | total cloud cover                | 1 | 6H,M |                        |
 | lcc     +         | liquid cloud cover               | 1 | 6H,M |                        |
 | icc     +         | ice cloud cover                  | 1 | 6H,M |                        |
-| cod               | cloud optical depth      | 1 | 6H,M |                        |
-| codclw  +         | cloud optical depth due to liquid     | 1 | 6H,M |                        |
-| codcli  +         | cloud optical depth due to ice              | 1 | 6H,M |                        |
-| lwp               | vertically integrated cloud water  | kg m-2 | 6H,M |                        |
-| clivi             | vertically integrated cloud ice    | kg m-2 | 6H,M |                        |
-| pr                | precipitation flux                 | kg m-2 s-1 | 6H,M |                        |
+| cdnctop +         | cloud droplet number concentration at cloud top | m-3 | 6H,M | grid cell mean, not in-cloud   |
+| reffclwtop        | effective radius of cloud droplet at cloud top  | m       | 6H,M | grid cell mean, not in-cloud   |
+| reffclitop        | effective radius of ice crystal at cloud top    | m       | 6H,M | grid cell mean, not in-cloud   |
+| ttop              | air temperature at cloud top | K | 6H,M | grid cell mean, weighted by cloud cover |
+| **cloud-top diag seen from TOA >**
+| n_liq_layer       | number of liquid cloud layers    | 1 | 6H,M |                        |
+| icncvi +?         | vertically integrated ice crystal number concentration | m-2   | 6H,M | grid cell mean, not in-cloud |
+| cdncvi +?         | vertically integrated cloud droplet number concentration | m-2   | 6H,M | grid cell mean, not in-cloud |
+| lwp               | vertically integrated cloud water  | kg m-2 | 6H,M | grid cell mean, not in-cloud  |
+| clivi             | vertically integrated cloud ice    | kg m-2 | 6H,M | grid cell mean, not in-cloud  |
+| cod               | cloud optical depth      | 1 | 6H,M | grid cell mean, not in-cloud |
+| codclw  +         | cloud optical depth due to liquid     | 1 | 6H,M | grid cell mean, not in-cloud |
+| codcli  +         | cloud optical depth due to ice              | 1 | 6H,M | grid cell mean, not in-cloud |
+| cbh +        | liquid cloud base height (a.g.l. ) | m | 6H | only 6H|
+| wb +         | updraft velocity at cloud base for activation | m s-1 | 6H,M | |
+| bldep        | atmosphere_boundary_layer_thickness | m | 6H,M | |
+| lts +        | lower tropospheric stability | K | 6H,M | potential temperature difference (theta at 700hPa – theta at 1000hPa)|
+| pr           | precipitation flux                 | kg m-2 s-1 | 6H,M |                        |
 | rsdt         | toa incoming shortwave flux | W m-2 | 6H,M | |
 | rsut         | toa outgoing shortwave flux | W m-2 | 6H,M | |
 | rsutcs       | toa outgoing shortwave flux (clear-sky) | W m-2 | 6H,M | |
@@ -254,15 +263,10 @@ These parameters are either less critical than mandatory parameters or important
 | rsutcsaf     | toa outgoing shortwave flux (clear-sky and aerosol-free)  | W m-2 | 6H,M | |
 | rlutaf       | toa outgoing longwave flux (aerosol-free)  | W m-2 | 6H,M | |
 | rlutcsaf     | toa outgoing longwave flux (clear-sky and aerosol-free)  | W m-2 | 6H,M | |
-| bldep        | atmosphere_boundary_layer_thickness | m | 6H,M | |
-| lts +        | lower tropospheric stability | K | 6H,M | potential temperature difference (theta at 700hPa – theta at 1000hPa)|
-| wb +         | updraft velocity at cloud base for activation | m s-1 | 6H,M | |
-| cth +        | liquid cloud top height (a.g.l.) | m | 6H,M | |
-| cbh +        | liquid cloud base height (a.g.l. ) | m | 6H,M | |
-| sftlf        | land area fraction | 1 | M | |
+| sftlf        | land area fraction | % | M | |
 | albsrfc  +   | surface albedo | 1 | M | |
-| ua10m          | eastward_wind at 10m | m s-1 | M | |
-| va10m          | northward_wind at 10m | m s-1 | M | |
+| ua10m        | eastward_wind at 10m | m s-1 | M | |
+| va10m        | northward_wind at 10m | m s-1 | M | |
 | hfls         | surface_upward_latent_heat_flux | W m-2 | M | |
 | hfss         | surface_upward_sensible_heat_flux | W m-2 | M | |
 | prw          | atmosphere_mass_content_of_water_vapor | kg m-2 | M | |
@@ -288,13 +292,7 @@ These parameters are either less critical than mandatory parameters or important
 | od550dust    | aerosol optical depth due to dust | 1 | M |  |
 | od550ss      | aerosol optical depth due to seasalt | 1 | M |  |
 | od550aerh2o  | aerosol optical depth due to aerosol water  | 1 | M |  |
->**Note**: For the Fortran code used to diagnose cloud-top properties by phase, see the *"Cloud-top calculation"* section of the [aci-baseline](../aci-baseline/aci-baseline.md) experiment documentation.
 
-
-### Optional 3D outputs
-| **AeroCom name**         | **Description**                     | **Units** | **Freq**             |**Remark**             |
-|---------------------------|---------------------------------------|----------|------------------------|------------------------|
-| conccn500_800 +| number concentration of aerosols  (500<D<800nm)  | m-2 | 6H |lowest 3 model levels| 
 ### Optional 2D outputs
 
 | **AeroCom name**         | **Description**                     | **Units** | **Freq**             |**Remark**             |
@@ -309,7 +307,6 @@ These parameters are either less critical than mandatory parameters or important
 | reffclimodis | modis_Cloud_Particle_Size_Ice | m | 6H | **highly recommanded** |
 | lwpmodis     | modis liquid water path | kg m-2 | 6H | **highly recommanded** |
 | clivimodis   | modis ice water path | kg m-2 | 6H | **highly recommanded** |
-| ttop         | air_temperature_at_cloud_top | K | 6H |#TBD warm (T>268K) cloud top temperature>? phase? |
 | od550aer_ks + | aerosol optical depth (soluble Aitken mode) | 1 | M |  |
 | od550aer_as + | aerosol optical depth (soluble accumulation mode) | 1 | M |  |
 | od550aer_cs + | aerosol optical depth (soluble coarse mode) | 1 | M |  |
@@ -317,6 +314,23 @@ These parameters are either less critical than mandatory parameters or important
 | od550aer_ai + | aerosol optical depth (insoluble accumulation mode) | 1 | M |  |
 | od550aer_ci + | aerosol optical depth (insoluble coarse mode) | 1 | M |  |
 
+### Output size estimate
+
+For a 1-year simulation:
+
+- M/2D: ~2 MB per variable
+- M/3D: ~2 × 47 (levels) = 94 MB per variable
+- 6H/2D: ~2 × 4 × 30 = 240 MB per variable
+- 6H/3D: ~2 × 4 × 30 × 8 (levels) = 1.9 GB per variable
+
+PPEs with 350 ensemble members in total (PD + PI) would generate (optional variables in parentheses):
+
+- M/2D: ~350 × 100(+6) × 2 MB = 68(+4) GB
+- M/3D: ~350 × 25 × 94 MB = 803 GB
+- 6H/2D: ~350 × 62(+10) × 240 MB = 5.0(+0.8) TB
+- 6H/3D: ~175 × 1 × 1.9 GB = 0.32 TB (ec355aer only for PD)
+
+**Total: ~6.2 TB for mandatory variables + ~0.8 TB for optional variables.**
 
 ## Model Output Submission
 
@@ -331,13 +345,15 @@ For **PPE experiments**, submit the following data via the AeroCom website ([Sub
 
 - Required outputs from the control run + all LHS-generated ensemble members.
 
+>**Note**: it is recommended to use NetCDF compression (e.g., -z zip_4 in CDO) to reduce output file size.
+
 
 
 
 ### Model Output Naming Convention
 The format for the AeroCom file name (one variable per file) should be:
 
-`aerocom4_<ModelName>_<YOUR_EXPERIMENT_NAME>-<SimulationName>_<VariableName>_<VerticalCoordinateType>_<Year>_monthly.nc`
+`aerocom4_<ModelName>_<YOUR_EXPERIMENT_NAME>-<SimulationName>_<VariableName>_<VerticalCoordinateType>_<Year>_<Freq>.nc`
 
 #### Example Filenames
 - **2-D:** `aerocom4_ICON-HAM_<YOUR_EXPERIMENT_NAME>-PD_aod_Surface_2025_monthly.nc`
